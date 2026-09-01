@@ -42,9 +42,24 @@ export default function AdminDashboard() {
   const [showInvoice, setShowInvoice] = useState(null);
   const [deletingPackageId, setDeletingPackageId] = useState(null);
 
-  // Load packages from API
+  // Load packages only after an authenticated admin session exists.
   useEffect(() => {
+    const SESSION_KEY = "admin_auth_token";
+
     const loadPackages = async () => {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem(SESSION_KEY)
+          : null;
+
+      // Do not call protected endpoints before authentication.
+      if (!token) {
+        console.log(
+          "Skipping package load until admin authentication is complete."
+        );
+        return;
+      }
+
       try {
         console.log("Loading packages from API...");
         const data = await ApiService.getPackages();
@@ -91,7 +106,27 @@ export default function AdminDashboard() {
       }
     };
 
+    const handleAuthenticated = () => {
+      console.log(
+        "Admin authentication completed. Loading packages..."
+      );
+      loadPackages();
+    };
+
+    window.addEventListener(
+      "admin-authenticated",
+      handleAuthenticated
+    );
+
+    // Load immediately when a valid session already exists.
     loadPackages();
+
+    return () => {
+      window.removeEventListener(
+        "admin-authenticated",
+        handleAuthenticated
+      );
+    };
   }, []);
 
   const [newPackage, setNewPackage] = useState({

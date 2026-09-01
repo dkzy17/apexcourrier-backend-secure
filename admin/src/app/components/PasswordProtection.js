@@ -49,6 +49,9 @@ export default function PasswordProtection({ children }) {
         localStorage.setItem(SESSION_KEY, response.token);
         setIsAuthenticated(true);
         setPassword("");
+
+        // Tell protected dashboard components that authentication completed.
+        window.dispatchEvent(new Event("admin-authenticated"));
       } else {
         setError("Invalid email or password. Please try again.");
       }
@@ -110,7 +113,7 @@ export default function PasswordProtection({ children }) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
-                  placeholder="admin@apexcourrier.com"
+                  placeholder="admin@translyfter.com"
                   required
                   disabled={submitting}
                 />
