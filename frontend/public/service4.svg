@@ -1,0 +1,63 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="150" fill="#f8f9fa"/>
+  
+  <!-- Large cargo truck -->
+  <rect x="20" y="70" width="80" height="30" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+  
+  <!-- Truck cab -->
+  <rect x="15" y="75" width="25" height="20" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  
+  <!-- Truck windows -->
+  <rect x="18" y="78" width="8" height="6" fill="#87ceeb"/>
+  <rect x="28" y="78" width="8" height="6" fill="#87ceeb"/>
+  
+  <!-- Truck wheels -->
+  <circle cx="30" cy="105" r="6" fill="#2c3e50"/>
+  <circle cx="55" cy="105" r="6" fill="#2c3e50"/>
+  <circle cx="85" cy="105" r="6" fill="#2c3e50"/>
+  
+  <!-- Cargo container on truck -->
+  <rect x="45" y="75" width="50" height="20" fill="#3498db" stroke="#2980b9" stroke-width="1"/>
+  
+  <!-- Container details -->
+  <rect x="48" y="78" width="6" height="6" fill="#2980b9"/>
+  <rect x="56" y="78" width="6" height="6" fill="#2980b9"/>
+  <rect x="64" y="78" width="6" height="6" fill="#2980b9"/>
+  <rect x="72" y="78" width="6" height="6" fill="#2980b9"/>
+  <rect x="80" y="78" width="6" height="6" fill="#2980b9"/>
+  
+  <rect x="48" y="86" width="6" height="6" fill="#2980b9"/>
+  <rect x="56" y="86" width="6" height="6" fill="#2980b9"/>
+  <rect x="64" y="86" width="6" height="6" fill="#2980b9"/>
+  <rect x="72" y="86" width="6" height="6" fill="#2980b9"/>
+  <rect x="80" y="86" width="6" height="6" fill="#2980b9"/>
+  
+  <!-- Crane loading cargo -->
+  <rect x="120" y="30" width="6" height="70" fill="#f39c12"/>
+  <rect x="110" y="32" width="25" height="4" fill="#f39c12"/>
+  
+  <!-- Crane hook and cargo -->
+  <line x1="130" y1="36" x2="130" y2="55" stroke="#2c3e50" stroke-width="2"/>
+  <rect x="125" y="55" width="10" height="8" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  
+  <!-- Workers in safety gear -->
+  <circle cx="140" cy="85" r="5" fill="#f4d1ae"/>
+  <rect x="137" y="90" width="6" height="10" fill="#f39c12"/>
+  <rect x="135" y="100" width="10" height="8" fill="#2c3e50"/>
+  
+  <circle cx="160" cy="85" r="5" fill="#f4d1ae"/>
+  <rect x="157" y="90" width="6" height="10" fill="#f39c12"/>
+  <rect x="155" y="100" width="10" height="8" fill="#2c3e50"/>
+  
+  <!-- Cargo containers in background -->
+  <rect x="170" y="60" width="15" height="15" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+  <rect x="170" y="45" width="15" height="15" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+  <rect x="170" y="30" width="15" height="15" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="110" width="200" height="40" fill="#95a5a6"/>
+  
+  <!-- Text overlay -->
+  <text x="100" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">Cargo Services</text>
+</svg>

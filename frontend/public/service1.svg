@@ -1,0 +1,35 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container/Shipping background -->
+  <rect width="200" height="150" fill="#f8f9fa"/>
+  
+  <!-- Container stacks -->
+  <rect x="20" y="60" width="30" height="20" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  <rect x="20" y="40" width="30" height="20" fill="#3498db" stroke="#2980b9" stroke-width="1"/>
+  <rect x="20" y="20" width="30" height="20" fill="#f39c12" stroke="#e67e22" stroke-width="1"/>
+  
+  <rect x="55" y="60" width="30" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+  <rect x="55" y="40" width="30" height="20" fill="#9b59b6" stroke="#8e44ad" stroke-width="1"/>
+  <rect x="55" y="20" width="30" height="20" fill="#e67e22" stroke="#d35400" stroke-width="1"/>
+  
+  <rect x="90" y="60" width="30" height="20" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  <rect x="90" y="40" width="30" height="20" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  
+  <!-- Worker figure -->
+  <circle cx="140" cy="45" r="8" fill="#f4d1ae"/>
+  <rect x="135" y="53" width="10" height="15" fill="#f39c12"/>
+  <rect x="132" y="68" width="16" height="12" fill="#2c3e50"/>
+  
+  <!-- Tablet/device in hands -->
+  <rect x="148" y="58" width="12" height="8" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  <rect x="149" y="59" width="10" height="6" fill="#3498db"/>
+  
+  <!-- Ground/platform -->
+  <rect x="0" y="80" width="200" height="70" fill="#bdc3c7"/>
+  
+  <!-- Crane/equipment silhouette -->
+  <rect x="160" y="30" width="4" height="50" fill="#7f8c8d"/>
+  <rect x="150" y="32" width="20" height="3" fill="#7f8c8d"/>
+  
+  <!-- Text overlay -->
+  <text x="100" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">Express Delivery</text>
+</svg>

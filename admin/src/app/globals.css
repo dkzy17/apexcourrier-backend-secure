@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* This admin UI is light-only (every panel is bg-white). Pinning the
+     color-scheme stops iOS/WebKit from repainting form controls with its
+     dark system appearance — the cause of the "text turns white/invisible,
+     inverts on highlight" bug reported on iPhone in dark mode. */
+  color-scheme: light;
+  --primary: #ff7700;
+  --secondary: #ff7700;
+  --almond: #f5f5dc;
+  --dark: #1f2937;
+  --light: #f9fafb;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 249, 250, 251;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Force readable, consistent colors on every form control across browsers.
+   -webkit-text-fill-color is required because iOS Safari/Brave otherwise
+   override the text color of inputs and selects in dark mode. */
+input,
+select,
+textarea {
+  color: #111827;
+  -webkit-text-fill-color: #111827;
+  background-color: #ffffff;
+  opacity: 1;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+  -webkit-text-fill-color: #9ca3af;
+  opacity: 1;
+}
+
+/* Keep selected/highlighted text legible instead of white-on-black. */
+input::selection,
+select::selection,
+textarea::selection {
+  background-color: #ff7700;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+/* Disabled controls (e.g. read-only status field) stay readable, not washed out. */
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: #374151;
+  -webkit-text-fill-color: #374151;
+  background-color: #f3f4f6;
+  opacity: 1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply bg-brand text-white px-4 py-2 rounded-lg hover:bg-brand-dark transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-brand text-white px-4 py-2 rounded-lg hover:bg-brand-dark transition-colors;
+}
+
+.btn-outline {
+  @apply border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+/* Form input styles */
+.form-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent;
+}
+
+/* Card styles */
+.card {
+  @apply bg-white rounded-lg shadow-sm border;
+}
+
+.card-header {
+  @apply p-6 border-b;
+}
+
+.card-body {
+  @apply p-6;
+}
+
+/* Status badge styles */
+.status-delivered {
+  @apply bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.status-in-transit {
+  @apply bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.status-on-hold {
+  @apply bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.status-returned {
+  @apply bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium;
+}

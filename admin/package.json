@@ -1,0 +1,27 @@
+{
+  "name": "ocean-edge-logistics-admin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Admin dashboard for ApexCourrier package management",
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "framer-motion": "^11.0.3",
+    "nanoid": "^5.1.6",
+    "next": "^15.5.25",
+    "react": "^19.1.2",
+    "react-dom": "^19.1.2",
+    "react-icons": "^5.0.1",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.23",
+    "tailwindcss": "^3.4.19"
+  }
+}

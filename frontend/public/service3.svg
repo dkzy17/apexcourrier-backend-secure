@@ -1,0 +1,58 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="150" fill="#ecf0f1"/>
+  
+  <!-- Warehouse structure -->
+  <rect x="20" y="40" width="160" height="80" fill="#bdc3c7" stroke="#95a5a6" stroke-width="2"/>
+  
+  <!-- Warehouse roof -->
+  <polygon points="15,40 100,20 185,40" fill="#7f8c8d" stroke="#95a5a6" stroke-width="2"/>
+  
+  <!-- Warehouse doors -->
+  <rect x="30" y="80" width="25" height="40" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  <rect x="60" y="80" width="25" height="40" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  <rect x="90" y="80" width="25" height="40" fill="#34495e" stroke="#2c3e50" stroke-width="1"/>
+  
+  <!-- Door handles -->
+  <circle cx="52" cy="100" r="2" fill="#f39c12"/>
+  <circle cx="82" cy="100" r="2" fill="#f39c12"/>
+  <circle cx="112" cy="100" r="2" fill="#f39c12"/>
+  
+  <!-- Storage shelves visible through windows -->
+  <rect x="125" y="60" width="40" height="30" fill="#ffffff" stroke="#95a5a6" stroke-width="1"/>
+  
+  <!-- Shelf levels -->
+  <line x1="125" y1="70" x2="165" y2="70" stroke="#95a5a6" stroke-width="1"/>
+  <line x1="125" y1="80" x2="165" y2="80" stroke="#95a5a6" stroke-width="1"/>
+  
+  <!-- Boxes on shelves -->
+  <rect x="128" y="62" width="6" height="6" fill="#e74c3c"/>
+  <rect x="136" y="62" width="6" height="6" fill="#3498db"/>
+  <rect x="144" y="62" width="6" height="6" fill="#f39c12"/>
+  <rect x="152" y="62" width="6" height="6" fill="#2ecc71"/>
+  
+  <rect x="128" y="72" width="6" height="6" fill="#9b59b6"/>
+  <rect x="136" y="72" width="6" height="6" fill="#e67e22"/>
+  <rect x="144" y="72" width="6" height="6" fill="#1abc9c"/>
+  
+  <rect x="128" y="82" width="6" height="6" fill="#34495e"/>
+  <rect x="136" y="82" width="6" height="6" fill="#e74c3c"/>
+  
+  <!-- Forklift -->
+  <rect x="140" y="100" width="15" height="8" fill="#f39c12" stroke="#e67e22" stroke-width="1"/>
+  <rect x="145" y="95" width="3" height="15" fill="#e67e22"/>
+  
+  <!-- Forklift wheels -->
+  <circle cx="143" cy="110" r="3" fill="#2c3e50"/>
+  <circle cx="152" cy="110" r="3" fill="#2c3e50"/>
+  
+  <!-- Worker operating forklift -->
+  <circle cx="148" cy="98" r="3" fill="#f4d1ae"/>
+  <rect x="146" y="101" width="4" height="6" fill="#3498db"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="120" width="200" height="30" fill="#95a5a6"/>
+  
+  <!-- Text overlay -->
+  <text x="100" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">Warehousing</text>
+</svg>
