@@ -254,7 +254,7 @@ app.use((err, req, res, next) => {
 // Start server
 // ------------------------------------------------------------
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, "127.0.0.1", () => {
   console.log(
     `Server running on port ${PORT} (${NODE_ENV})`
   );
@@ -274,3 +274,4 @@ function shutdown(signal) {
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
+
