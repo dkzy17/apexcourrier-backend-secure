@@ -138,7 +138,7 @@ class ApiService {
 
   async updatePackage(id, packageData, imageFile) {
     return this.request(`/packages/${id}`, {
-      method: "PATCH",
+      method: "PUT",
       body: imageFile
         ? this.buildPackageForm(packageData, imageFile)
         : packageData,
