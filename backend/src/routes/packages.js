@@ -112,9 +112,9 @@ const validatePackage = [
 // ------------------------------------------------------------
 // PUBLIC TRACKING PROJECTION
 // ------------------------------------------------------------
-// Never return customer contact information to the public.
-// The frontend still receives sender/receiver objects so the
-// existing UI doesn't crash, but sensitive fields are omitted.
+// Public tracking may return sender/receiver names and addresses
+// needed by the tracking page, but never exposes customer email
+// addresses or phone numbers.
 // ------------------------------------------------------------
 
 function publicPackageView(pkg) {
@@ -123,18 +123,29 @@ function publicPackageView(pkg) {
   return {
     id: obj._id,
     trackingNumber: obj.trackingNumber,
+
+    // Public shipment route.
+    // Prefer dedicated origin/destination fields.
+    // Fall back to the historical sender/receiver addresses
+    // used by older packages.
+    origin: obj.origin || obj.sender?.address || "",
+    destination: obj.destination || obj.receiver?.address || "",
+
+    // Never expose private contact/address information publicly.
     sender: {
       name: obj.sender?.name || "",
       email: "",
       phone: "",
       address: "",
     },
+
     receiver: {
       name: obj.receiver?.name || "",
       email: "",
       phone: "",
       address: "",
     },
+
     weight: obj.weight,
     dimensions: obj.dimensions,
     serviceType: obj.serviceType,
@@ -144,6 +155,7 @@ function publicPackageView(pkg) {
     quantity: obj.quantity || 1,
     description: obj.description || "",
     status: obj.status,
+
     events: Array.isArray(obj.events)
       ? obj.events.map((event) => ({
           status: event.status,
@@ -152,6 +164,7 @@ function publicPackageView(pkg) {
           notes: event.notes || "",
         }))
       : [],
+
     packageImage: obj.packageImage || "",
     createdAt: obj.createdAt,
     updatedAt: obj.updatedAt,
@@ -159,7 +172,7 @@ function publicPackageView(pkg) {
 }
 
 // ------------------------------------------------------------
-// GET ALL PACKAGES — ADMIN ONLY
+// GET ALL PACKAGES â€” ADMIN ONLY
 // ------------------------------------------------------------
 
 router.get("/", async (req, res, next) => {
@@ -185,7 +198,10 @@ router.get("/", async (req, res, next) => {
     );
   }
 
-  // Public tracking lookup.
+  // ----------------------------------------------------------
+  // PUBLIC TRACKING LOOKUP
+  // ----------------------------------------------------------
+
   try {
     const trackingNumber = String(req.query.trackingNumber)
       .trim()
@@ -214,7 +230,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // ------------------------------------------------------------
-// GET SINGLE PACKAGE — ADMIN ONLY
+// GET SINGLE PACKAGE â€” ADMIN ONLY
 // ------------------------------------------------------------
 
 router.get(
@@ -244,7 +260,7 @@ router.get(
 );
 
 // ------------------------------------------------------------
-// CREATE PACKAGE — ADMIN ONLY
+// CREATE PACKAGE â€” ADMIN ONLY
 // ------------------------------------------------------------
 
 router.post(
@@ -264,22 +280,27 @@ router.post(
     }
 
     try {
-      const data = { ...req.body };
+      const packageData = {
+        ...req.body,
+      };
 
       if (req.file) {
-        data.packageImage = fileToDataUri(req.file);
+        packageData.packageImage = fileToDataUri(req.file);
       }
 
-      const pkg = new Package(data);
-      const newPackage = await pkg.save();
+      const pkg = await Package.create(packageData);
 
-      res.status(201).json(
-        attachImageUrl(req, newPackage)
-      );
+      res.status(201).json(attachImageUrl(req, pkg));
     } catch (err) {
-      console.error("Database save failed:", err);
+      console.error("Error creating package:", err);
 
-      res.status(400).json({
+      if (err.code === 11000) {
+        return res.status(409).json({
+          message: "Tracking number already exists.",
+        });
+      }
+
+      res.status(500).json({
         message: "Unable to create package.",
       });
     }
@@ -287,10 +308,10 @@ router.post(
 );
 
 // ------------------------------------------------------------
-// UPDATE PACKAGE — ADMIN ONLY
+// UPDATE PACKAGE â€” ADMIN ONLY
 // ------------------------------------------------------------
 
-router.patch(
+router.put(
   "/:id",
   requireAuth,
   requireAdmin,
@@ -299,17 +320,11 @@ router.patch(
   normalizeMultipart,
   async (req, res) => {
     try {
-      const pkg = await Package.findById(req.params.id);
-
-      if (!pkg) {
-        return res.status(404).json({
-          message: "Package not found",
-        });
-      }
-
-      // Never allow identity/security-sensitive fields to be modified
-      // through arbitrary object assignment.
+      // PUT is the live admin update endpoint.
+      // It performs a partial update: omitted fields remain unchanged.
       const allowedFields = [
+        "origin",
+        "destination",
         "sender",
         "receiver",
         "weight",
@@ -321,29 +336,50 @@ router.patch(
         "quantity",
         "description",
         "status",
-        "type",
       ];
 
-      for (const key of allowedFields) {
-        if (Object.prototype.hasOwnProperty.call(req.body, key)) {
-          pkg[key] = req.body[key];
+      const updateData = {};
+
+      for (const field of allowedFields) {
+        if (Object.prototype.hasOwnProperty.call(req.body, field)) {
+          updateData[field] = req.body[field];
         }
       }
 
-      // trackingNumber and _id are intentionally immutable here.
+      // Only replace the image when an actual file was uploaded.
+      // If packageImage is omitted, the existing image remains unchanged.
       if (req.file) {
-        pkg.packageImage = fileToDataUri(req.file);
+        updateData.packageImage = fileToDataUri(req.file);
       }
 
-      const updatedPackage = await pkg.save();
+      updateData.updatedAt = new Date();
 
-      res.json(
-        attachImageUrl(req, updatedPackage)
+      const pkg = await Package.findByIdAndUpdate(
+        req.params.id,
+        { $set: updateData },
+        {
+          new: true,
+          runValidators: true,
+        }
       );
+
+      if (!pkg) {
+        return res.status(404).json({
+          message: "Package not found",
+        });
+      }
+
+      res.json(attachImageUrl(req, pkg));
     } catch (err) {
       console.error("Error updating package:", err);
 
-      res.status(400).json({
+      if (err.code === 11000) {
+        return res.status(409).json({
+          message: "Tracking number already exists.",
+        });
+      }
+
+      res.status(500).json({
         message: "Unable to update package.",
       });
     }
@@ -351,7 +387,7 @@ router.patch(
 );
 
 // ------------------------------------------------------------
-// DELETE PACKAGE — ADMIN ONLY
+// DELETE PACKAGE â€” ADMIN ONLY
 // ------------------------------------------------------------
 
 router.delete(
@@ -370,7 +406,7 @@ router.delete(
       }
 
       res.json({
-        message: "Package deleted",
+        message: "Package deleted successfully.",
       });
     } catch (err) {
       console.error("Error deleting package:", err);
@@ -383,7 +419,7 @@ router.delete(
 );
 
 // ------------------------------------------------------------
-// ADD TRACKING EVENT — ADMIN ONLY
+// ADD PACKAGE EVENT â€” ADMIN ONLY
 // ------------------------------------------------------------
 
 router.post(
@@ -394,17 +430,20 @@ router.post(
   [
     body("status")
       .notEmpty()
-      .isLength({ max: 100 })
-      .withMessage("Status is required"),
+      .trim()
+      .isLength({ max: 120 })
+      .withMessage("Event status is required"),
 
     body("location")
       .notEmpty()
-      .isLength({ max: 300 })
-      .withMessage("Location is required"),
+      .trim()
+      .isLength({ max: 500 })
+      .withMessage("Event location is required"),
 
     body("notes")
       .optional()
-      .isLength({ max: 2000 }),
+      .isLength({ max: 2000 })
+      .withMessage("Event notes must be <= 2000 characters"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -416,7 +455,31 @@ router.post(
     }
 
     try {
-      const pkg = await Package.findById(req.params.id);
+      const event = {
+        status: req.body.status,
+        location: req.body.location,
+        notes: req.body.notes || "",
+        timestamp: req.body.timestamp
+          ? new Date(req.body.timestamp)
+          : new Date(),
+      };
+
+      const pkg = await Package.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: {
+            events: event,
+          },
+          $set: {
+            status: event.status,
+            updatedAt: new Date(),
+          },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
 
       if (!pkg) {
         return res.status(404).json({
@@ -424,27 +487,12 @@ router.post(
         });
       }
 
-      pkg.events.push({
-        status: req.body.status.trim(),
-        location: req.body.location.trim(),
-        notes:
-          typeof req.body.notes === "string"
-            ? req.body.notes.trim()
-            : "",
-      });
-
-      pkg.status = req.body.status.trim();
-
-      const updatedPackage = await pkg.save();
-
-      res.json(
-        attachImageUrl(req, updatedPackage)
-      );
+      res.json(attachImageUrl(req, pkg));
     } catch (err) {
-      console.error("Error adding tracking event:", err);
+      console.error("Error adding package event:", err);
 
-      res.status(400).json({
-        message: "Unable to add tracking event.",
+      res.status(500).json({
+        message: "Unable to add package event.",
       });
     }
   }

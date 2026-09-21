@@ -7,6 +7,20 @@ const pkgSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+
+  origin: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 500,
+  },
+
+  destination: {
+    type: String,
+    default: "",
+    trim: true,
+    maxlength: 500,
+  },
   sender: {
     name: { type: String, required: true },
     email: { type: String, required: true },
